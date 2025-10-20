@@ -219,45 +219,56 @@
   });
 
   function showResult(){
-    quizEl.style.display='none';
-    resultEl.style.display='block';
+  quizEl.style.display='none';
+  resultEl.style.display='block';
 
-    const topVirtue = Object.keys(scores).reduce((a,b)=> scores[a]>scores[b]?a:b);
+  const topVirtue = Object.keys(scores).reduce((a,b)=> scores[a]>scores[b]?a:b);
 
-    const icons = {'Prudencia':'💡','Justicia':'⚖️','Fortaleza':'🔥','Templanza':'💧','Sabiduría':'🧠','Ciencia':'🔬','Arte':'🎨','Entendimiento':'🧩'};
-    const colors = {'Prudencia':'#ffeb3b','Justicia':'#2196f3','Fortaleza':'#f44336','Templanza':'#4caf50','Sabiduría':'#9c27b0','Ciencia':'#00bcd4','Arte':'#ff9800','Entendimiento':'#8bc34a'};
-    const reflections = {
-  'Justicia':'Has demostrado ser una persona justa. Piensa cómo puedes seguir siendo un ejemplo de equidad para los demás.',
-  'Prudencia':'Sueles pensar antes de actuar. Reflexiona cómo tu calma puede inspirar a quienes se apresuran al decidir.',
-  'Fortaleza':'Enfrentas las dificultades con valor. Considera cómo esa fuerza puede ayudar a otros a no rendirse.',
-  'Templanza':'Controlas bien tus emociones. Piensa cómo puedes mantener esa serenidad incluso cuando otros pierden la calma.',
-  'Sabiduría':'Tomas decisiones con reflexión y equilibrio. ¿Cómo podrías compartir tu experiencia para ayudar a los demás?',
-  'Entendimiento':'Tienes empatía y escuchas antes de juzgar. Piensa cómo esa comprensión puede mejorar tu entorno.',
-  'Arte':'Tu creatividad te ayuda a expresarte y mejorar lo que haces. Reflexiona cómo puedes inspirar con tus ideas.',
-  'Ciencia':'Analizas las cosas con lógica y curiosidad. Piensa cómo ese pensamiento crítico puede resolver problemas en tu entorno.'
-};
+  const icons = {'Prudencia':'💡','Justicia':'⚖️','Fortaleza':'🔥','Templanza':'💧','Sabiduría':'🧠','Ciencia':'🔬','Arte':'🎨','Entendimiento':'🧩'};
+  const colors = {'Prudencia':'#ffeb3b','Justicia':'#2196f3','Fortaleza':'#f44336','Templanza':'#4caf50','Sabiduría':'#9c27b0','Ciencia':'#00bcd4','Arte':'#ff9800','Entendimiento':'#8bc34a'};
+  const descriptions = {
+    'Prudencia':'Eres una persona prudente: reflexiva, equilibrada y paciente. Sueles anticiparte a las consecuencias y priorizar decisiones serenas por sobre impulsos momentáneos. En el ámbito laboral, esta virtud te ayuda a reducir riesgos, cuidar las relaciones y sostener compromisos responsables a largo plazo.',
+    'Justicia':'Eres una persona justa: valoras la equidad, el respeto y la honestidad. Reconoces el mérito de los demás y defiendes lo correcto incluso bajo presión. En tu trabajo, tu sentido de justicia genera confianza y fortalece equipos más transparentes y colaborativos.',
+    'Fortaleza':'Tienes fortaleza interior: afrontas la adversidad con determinación y mantienes tus principios cuando aparecen dificultades. Aceptas retos con valentía y resiliencia, lo que te vuelve un apoyo confiable para tu equipo en situaciones de alta exigencia.',
+    'Templanza':'Eres templado: regulas tus emociones y respondes con sensatez ante el conflicto. Tu autocontrol favorece climas laborales armónicos y te permite escuchar, empatizar y decidir con calma aun cuando hay tensión o prisa.',
+    'Sabiduría':'Eres sabio: analizas en profundidad, aprendes de la experiencia y te orientas por el bien común. Te apoyas en la razón y en principios sólidos para guiar decisiones complejas, convirtiéndote en un referente sereno y confiable.',
+    'Ciencia':'Tienes pensamiento científico: observas, contrastas y fundamentas con evidencia. Tu enfoque riguroso mejora la calidad de los resultados y aporta criterios claros para decidir con ética y precisión.',
+    'Arte':'Tienes espíritu creativo: imaginas alternativas y combinas estética con funcionalidad. Tu mirada innovadora aporta soluciones originales con sentido y coherencia, enriqueciendo procesos y resultados.',
+    'Entendimiento':'Eres comprensivo: conectas con las personas, interpretas contextos y acompañas con empatía. Esta virtud crea confianza, mejora el trabajo en equipo y favorece aprendizajes compartidos.'
+  };
 
-    const icon = icons[topVirtue]||'';
-    const color = colors[topVirtue]||'#fff';
-    const desc = descriptions[topVirtue]||'Tu perfil combina varias virtudes de forma equilibrada. Mantén ese crecimiento ético y sigue fortaleciendo tus decisiones con reflexión y propósito.';
-const reflection = reflections[topVirtue] || 'Elige una acción sencilla para aplicar esta virtud en tu día a día.';
-    resultEl.classList.remove('resultIn'); void resultEl.offsetWidth; resultEl.classList.add('resultIn');
-    resultEl.innerHTML = `
-      <div class="result-badge" style="border-color:${color}; color:${color}; background:rgba(255,255,255,.12)">${icon}<span>${topVirtue}</span></div>
-      <div class="result-title" style="color:${color}">${icon} ${topVirtue}</div>
-      <p class="result-text">${desc}</p>
-      <p class="muted"><b>Reflexión:</b> ${reflection}</p>
-      <div class="divider"></div>
-      <p class="muted"><b>Reflexión final:</b> ¿Cómo puedes aplicar esta virtud en tus decisiones diarias? Identifica una acción concreta para fortalecerla esta semana.</p>
-      <div class="row"><button class="btn" id="restartBtn">Volver a jugar</button></div>
-    `;
+  // 👇 Reflexión personalizada (usa el bloque que pegaste en el paso 1)
+  const reflections = {
+    'Justicia':'Has demostrado ser una persona justa. Piensa cómo puedes seguir siendo un ejemplo de equidad para los demás.',
+    'Prudencia':'Sueles pensar antes de actuar. Reflexiona cómo tu calma puede inspirar a quienes se apresuran al decidir.',
+    'Fortaleza':'Enfrentas las dificultades con valor. Considera cómo esa fuerza puede ayudar a otros a no rendirse.',
+    'Templanza':'Controlas bien tus emociones. Piensa cómo puedes mantener esa serenidad incluso cuando otros pierden la calma.',
+    'Sabiduría':'Tomas decisiones con reflexión y equilibrio. ¿Cómo podrías compartir tu experiencia para ayudar a los demás?',
+    'Entendimiento':'Tienes empatía y escuchas antes de juzgar. Piensa cómo esa comprensión puede mejorar tu entorno.',
+    'Arte':'Tu creatividad te ayuda a expresarte y mejorar lo que haces. Reflexiona cómo puedes inspirar con tus ideas.',
+    'Ciencia':'Analizas las cosas con lógica y curiosidad. Piensa cómo ese pensamiento crítico puede resolver problemas en tu entorno.'
+  };
 
-    document.getElementById('restartBtn').addEventListener('click', ()=>{
-      // Reiniciar a pantalla inicial
-      resultEl.style.display='none';
-      startEl.style.display='block';
-    });
-  }
+  const icon = icons[topVirtue]||'';
+  const color = colors[topVirtue]||'#fff';
+  const desc = descriptions[topVirtue] || 'Tu perfil combina varias virtudes de forma equilibrada. Mantén ese crecimiento ético y sigue fortaleciendo tus decisiones con reflexión y propósito.';
+  const reflection = reflections[topVirtue] || 'Elige una acción sencilla para aplicar esta virtud en tu día a día.';
+
+  resultEl.classList.remove('resultIn'); void resultEl.offsetWidth; resultEl.classList.add('resultIn');
+  resultEl.innerHTML = `
+    <div class="result-badge" style="border-color:${color}; color:${color}; background:rgba(255,255,255,.12)">${icon}<span>${topVirtue}</span></div>
+    <div class="result-title" style="color:${color}">${icon} ${topVirtue}</div>
+    <p class="result-text">${desc}</p>
+    <div class="divider"></div>
+    <p class="muted"><b>Reflexión:</b> ${reflection}</p>
+    <div class="row"><button class="btn" id="restartBtn">Volver a jugar</button></div>
+  `;
+
+  document.getElementById('restartBtn').addEventListener('click', ()=>{
+    resultEl.style.display='none';
+    startEl.style.display='block';
+  });
+}
 </script>
 </body>
 </html>
