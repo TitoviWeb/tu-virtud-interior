@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,7 +12,7 @@
     *{box-sizing:border-box}
     body{
       font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
-      background: linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)), url('fondo-dioses.png') center center / cover no-repeat fixed;
+      background: url('fondo-dioses.png') center center / cover no-repeat fixed;
       color: var(--text);
       margin: 0; padding: 0;
       min-height: 100vh;
@@ -21,7 +22,7 @@
     p{margin:8px 0}
     .container{
       width:min(680px,92vw);
-      background: rgb(181, 136, 99);
+      background: rgba(181, 136, 99, 0.88);
       backdrop-filter: blur(6px);
       border: 1px solid rgba(181, 136, 99, 0.5);
       border-radius: 18px;
@@ -64,8 +65,7 @@
     .result-badge{display:inline-flex; align-items:center; gap:8px; font-weight:700; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25); margin-bottom:10px}
     .result-text{line-height:1.65}
     .divider{height:1px; background:rgba(255,255,255,.25); margin:16px 0}
-    .muted{color:#6a4b2b; font-style:italic;}
-    .muted b{color:#b58a5c;}
+    .muted{color:#fff;}
     .row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
   </style>
 </head>
@@ -86,7 +86,7 @@
 
   <div class="container resultIn" id="result" style="display:none;"></div>
 
-<script>
+  <script>
   let questions = [
     {q:'Un compañero se equivoca y culpa a otro para no meterse en problemas. ¿Qué haces?', options:[
       {text:'Lo encaro con respeto y le pido que diga la verdad.', virtue:'Justicia'},
@@ -114,14 +114,14 @@
       {text:'Ignoro el error para no perder tiempo.', virtue:'Falta de Justicia'}]}
   ];
 
-  function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr }
-  let current=0; const scores={};
-  const startEl=document.getElementById('start'), quizEl=document.getElementById('quiz'), resultEl=document.getElementById('result'), qwrap=document.getElementById('qwrap'), nextBtn=document.getElementById('nextBtn'), bar=document.getElementById('bar');
+  function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+  let current=0;const scores={};
+  const startEl=document.getElementById('start'),quizEl=document.getElementById('quiz'),resultEl=document.getElementById('result'),qwrap=document.getElementById('qwrap'),nextBtn=document.getElementById('nextBtn'),bar=document.getElementById('bar');
   document.getElementById('startBtn').addEventListener('click',()=>{startQuiz();});
   function startQuiz(){current=0;for(const k in scores) delete scores[k];questions=shuffle(questions.map(q=>({q:q.q,options:shuffle([...q.options])})));startEl.style.display='none';resultEl.style.display='none';quizEl.style.display='block';renderQuestion();}
   function renderQuestion(){const total=questions.length;const q=questions[current];bar.style.width=`${(current/total)*100}%`;const opts=q.options.map((opt,i)=>{const name=`q${current}`;return `<label class="option"><input type="radio" name="${name}" value="${opt.virtue}"> ${opt.text}</label>`;}).join('');qwrap.innerHTML=`<div class="question">${current+1}. ${q.q}</div><div class="options">${opts}</div>`;nextBtn.textContent=(current===total-1)?'Ver resultado':'Aceptar';}
   nextBtn.addEventListener('click',()=>{const checked=document.querySelector(`input[name='q${current}']:checked`);if(!checked){alert('Por favor selecciona una opción.');return;}const v=checked.value;scores[v]=(scores[v]||0)+1;current++;if(current<questions.length){renderQuestion();}else{showResult();}});
-  
+
   function showResult(){
     quizEl.style.display='none';
     resultEl.style.display='block';
@@ -129,16 +129,16 @@
     const icons={'Prudencia':'💡','Justicia':'⚖️','Fortaleza':'🔥','Templanza':'💧','Sabiduría':'🧠','Ciencia':'🔬','Arte':'🎨','Entendimiento':'🧩'};
     const colors={'Prudencia':'#ffeb3b','Justicia':'#2196f3','Fortaleza':'#f44336','Templanza':'#4caf50','Sabiduría':'#9c27b0','Ciencia':'#00bcd4','Arte':'#ff9800','Entendimiento':'#8bc34a'};
 
-    // ✅ Se agregó este bloque que faltaba
+    // 🔧 Bloque agregado: descripciones completas
     const descriptions={
-      'Prudencia':'Eres una persona prudente: reflexiva, equilibrada y paciente. Sueles anticiparte a las consecuencias y priorizar decisiones serenas por sobre impulsos momentáneos.',
-      'Justicia':'Eres una persona justa: valoras la equidad, el respeto y la honestidad. Reconoces el mérito de los demás y defiendes lo correcto incluso bajo presión.',
-      'Fortaleza':'Tienes fortaleza interior: afrontas la adversidad con determinación y mantienes tus principios cuando aparecen dificultades.',
-      'Templanza':'Eres templado: regulas tus emociones y respondes con sensatez ante el conflicto.',
-      'Sabiduría':'Eres sabio: analizas en profundidad, aprendes de la experiencia y te orientas por el bien común.',
-      'Ciencia':'Tienes pensamiento científico: observas, contrastas y fundamentas con evidencia.',
-      'Arte':'Tienes espíritu creativo: imaginas alternativas y combinas estética con funcionalidad.',
-      'Entendimiento':'Eres comprensivo: conectas con las personas, interpretas contextos y acompañas con empatía.'
+      'Prudencia':'Eres una persona prudente: reflexiva, equilibrada y paciente. Sueles anticiparte a las consecuencias y priorizar decisiones serenas por sobre impulsos momentáneos. En el ámbito laboral, esta virtud te ayuda a reducir riesgos, cuidar las relaciones y sostener compromisos responsables a largo plazo.',
+      'Justicia':'Eres una persona justa: valoras la equidad, el respeto y la honestidad. Reconoces el mérito de los demás y defiendes lo correcto incluso bajo presión. En tu trabajo, tu sentido de justicia genera confianza y fortalece equipos más transparentes y colaborativos.',
+      'Fortaleza':'Tienes fortaleza interior: afrontas la adversidad con determinación y mantienes tus principios cuando aparecen dificultades. Aceptas retos con valentía y resiliencia, lo que te vuelve un apoyo confiable para tu equipo en situaciones de alta exigencia.',
+      'Templanza':'Eres templado: regulas tus emociones y respondes con sensatez ante el conflicto. Tu autocontrol favorece climas laborales armónicos y te permite escuchar, empatizar y decidir con calma aun cuando hay tensión o prisa.',
+      'Sabiduría':'Eres sabio: analizas en profundidad, aprendes de la experiencia y te orientas por el bien común. Te apoyas en la razón y en principios sólidos para guiar decisiones complejas, convirtiéndote en un referente sereno y confiable.',
+      'Ciencia':'Tienes pensamiento científico: observas, contrastas y fundamentas con evidencia. Tu enfoque riguroso mejora la calidad de los resultados y aporta criterios claros para decidir con ética y precisión.',
+      'Arte':'Tienes espíritu creativo: imaginas alternativas y combinas estética con funcionalidad. Tu mirada innovadora aporta soluciones originales con sentido y coherencia, enriqueciendo procesos y resultados.',
+      'Entendimiento':'Eres comprensivo: conectas con las personas, interpretas contextos y acompañas con empatía. Esta virtud crea confianza, mejora el trabajo en equipo y favorece aprendizajes compartidos.'
     };
 
     const reflections={
@@ -167,6 +167,6 @@
 
     document.getElementById('restartBtn').addEventListener('click',()=>{resultEl.style.display='none';startEl.style.display='block';});
   }
-</script>
+  </script>
 </body>
 </html>
