@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,10 +30,6 @@
     }
     .fadeUp{animation:fadeUp .8s ease both}
     @keyframes fadeUp{from{opacity:0; transform: translateY(16px)} to{opacity:1; transform: translateY(0)}}
-    .fadeIn{animation:fadeIn .25s ease both}
-    .fadeOut{animation:fadeOut .25s ease both}
-    @keyframes fadeIn{from{opacity:0} to{opacity:1}}
-    @keyframes fadeOut{from{opacity:1} to{opacity:0}}
     .resultIn{animation:resultIn 1s ease both}
     @keyframes resultIn{from{opacity:0; transform: translateY(8px)} to{opacity:1; transform: translateY(0)}}
     .title{font-weight:700; font-size: clamp(22px,4vw,30px)}
@@ -111,7 +106,23 @@
     {q:'Un compañero nuevo comete un error que retrasa todo.', options:[
       {text:'Le explico con paciencia y lo ayudo.', virtue:'Entendimiento'},
       {text:'Lo corrijo bruscamente.', virtue:'Falta de Templanza'},
-      {text:'Ignoro el error para no perder tiempo.', virtue:'Falta de Justicia'}]}
+      {text:'Ignoro el error para no perder tiempo.', virtue:'Falta de Justicia'}]},
+    {q:'Te proponen una idea arriesgada en una reunión.', options:[
+      {text:'Analizo los posibles resultados antes de opinar.', virtue:'Prudencia'},
+      {text:'Acepto sin pensar demasiado.', virtue:'Falta de Prudencia'},
+      {text:'Escucho primero todas las opiniones.', virtue:'Sabiduría'}]},
+    {q:'Te ofrecen ascender, pero el puesto exige más tiempo y presión.', options:[
+      {text:'Evalúo los pros y contras antes de decidir.', virtue:'Prudencia'},
+      {text:'Acepto sin pensarlo por impulso.', virtue:'Falta de Prudencia'},
+      {text:'Rechazo de inmediato sin analizar.', virtue:'Falta de Sabiduría'}]},
+    {q:'Debes liderar un grupo con varios conflictos internos.', options:[
+      {text:'Escucho a todos y promuevo el respeto.', virtue:'Entendimiento'},
+      {text:'Impongo mi autoridad sin diálogo.', virtue:'Falta de Justicia'},
+      {text:'Evito involucrarme en sus problemas.', virtue:'Falta de Fortaleza'}]},
+    {q:'Reconocen a alguien más por un trabajo que tú hiciste.', options:[
+      {text:'Lo tomo con calma y explico la situación luego.', virtue:'Templanza'},
+      {text:'Me enojo y reclamo en público.', virtue:'Falta de Prudencia'},
+      {text:'Dejo pasar para evitar conflictos.', virtue:'Falta de Justicia'}]}
   ];
 
   function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
@@ -129,39 +140,25 @@
     const icons={'Prudencia':'💡','Justicia':'⚖️','Fortaleza':'🔥','Templanza':'💧','Sabiduría':'🧠','Ciencia':'🔬','Arte':'🎨','Entendimiento':'🧩'};
     const colors={'Prudencia':'#ffeb3b','Justicia':'#2196f3','Fortaleza':'#f44336','Templanza':'#4caf50','Sabiduría':'#9c27b0','Ciencia':'#00bcd4','Arte':'#ff9800','Entendimiento':'#8bc34a'};
 
-    // 🔧 Bloque agregado: descripciones completas
+    // ✅ Solo se agregó esto
     const descriptions={
-      'Prudencia':'Eres una persona prudente: reflexiva, equilibrada y paciente. Sueles anticiparte a las consecuencias y priorizar decisiones serenas por sobre impulsos momentáneos. En el ámbito laboral, esta virtud te ayuda a reducir riesgos, cuidar las relaciones y sostener compromisos responsables a largo plazo.',
-      'Justicia':'Eres una persona justa: valoras la equidad, el respeto y la honestidad. Reconoces el mérito de los demás y defiendes lo correcto incluso bajo presión. En tu trabajo, tu sentido de justicia genera confianza y fortalece equipos más transparentes y colaborativos.',
-      'Fortaleza':'Tienes fortaleza interior: afrontas la adversidad con determinación y mantienes tus principios cuando aparecen dificultades. Aceptas retos con valentía y resiliencia, lo que te vuelve un apoyo confiable para tu equipo en situaciones de alta exigencia.',
-      'Templanza':'Eres templado: regulas tus emociones y respondes con sensatez ante el conflicto. Tu autocontrol favorece climas laborales armónicos y te permite escuchar, empatizar y decidir con calma aun cuando hay tensión o prisa.',
-      'Sabiduría':'Eres sabio: analizas en profundidad, aprendes de la experiencia y te orientas por el bien común. Te apoyas en la razón y en principios sólidos para guiar decisiones complejas, convirtiéndote en un referente sereno y confiable.',
-      'Ciencia':'Tienes pensamiento científico: observas, contrastas y fundamentas con evidencia. Tu enfoque riguroso mejora la calidad de los resultados y aporta criterios claros para decidir con ética y precisión.',
-      'Arte':'Tienes espíritu creativo: imaginas alternativas y combinas estética con funcionalidad. Tu mirada innovadora aporta soluciones originales con sentido y coherencia, enriqueciendo procesos y resultados.',
-      'Entendimiento':'Eres comprensivo: conectas con las personas, interpretas contextos y acompañas con empatía. Esta virtud crea confianza, mejora el trabajo en equipo y favorece aprendizajes compartidos.'
-    };
-
-    const reflections={
-      'Justicia':'Has demostrado ser una persona justa. Piensa cómo puedes seguir siendo un ejemplo de equidad para los demás.',
-      'Prudencia':'Sueles pensar antes de actuar. Reflexiona cómo tu calma puede inspirar a quienes se apresuran al decidir.',
-      'Fortaleza':'Enfrentas las dificultades con valor. Considera cómo esa fuerza puede ayudar a otros a no rendirse.',
-      'Templanza':'Controlas bien tus emociones. Piensa cómo puedes mantener esa serenidad incluso cuando otros pierden la calma.',
-      'Sabiduría':'Tomas decisiones con reflexión y equilibrio. ¿Cómo podrías compartir tu experiencia para ayudar a los demás?',
-      'Entendimiento':'Tienes empatía y escuchas antes de juzgar. Piensa cómo esa comprensión puede mejorar tu entorno.',
-      'Arte':'Tu creatividad te ayuda a expresarte y mejorar lo que haces. Reflexiona cómo puedes inspirar con tus ideas.',
-      'Ciencia':'Analizas las cosas con lógica y curiosidad. Piensa cómo ese pensamiento crítico puede resolver problemas en tu entorno.'
+      'Prudencia':'Eres una persona prudente: reflexiva, equilibrada y paciente. Sueles anticiparte a las consecuencias y priorizar decisiones serenas por sobre impulsos momentáneos.',
+      'Justicia':'Eres una persona justa: valoras la equidad, el respeto y la honestidad. Reconoces el mérito de los demás y defiendes lo correcto incluso bajo presión.',
+      'Fortaleza':'Tienes fortaleza interior: afrontas la adversidad con determinación y mantienes tus principios cuando aparecen dificultades.',
+      'Templanza':'Eres templado: regulas tus emociones y respondes con sensatez ante el conflicto.',
+      'Sabiduría':'Eres sabio: analizas en profundidad, aprendes de la experiencia y te orientas por el bien común.',
+      'Ciencia':'Tienes pensamiento científico: observas, contrastas y fundamentas con evidencia.',
+      'Arte':'Tienes espíritu creativo: imaginas alternativas y combinas estética con funcionalidad.',
+      'Entendimiento':'Eres comprensivo: conectas con las personas, interpretas contextos y acompañas con empatía.'
     };
 
     const icon=icons[topVirtue]||'';const color=colors[topVirtue]||'#fff';
     const desc=descriptions[topVirtue]||'Tu perfil combina varias virtudes.';
-    const reflection=reflections[topVirtue]||'Elige una acción sencilla para aplicar esta virtud en tu día a día.';
     
     resultEl.innerHTML=`
       <div class="result-badge" style="border-color:${color}; color:${color}; background:rgba(255,255,255,.12)">${icon}<span>${topVirtue}</span></div>
       <div class="result-title" style="color:${color}">${icon} ${topVirtue}</div>
       <p class="result-text">${desc}</p>
-      <div class="divider"></div>
-      <p class="muted"><b>Reflexión:</b> ${reflection}</p>
       <div class="row"><button class="btn" id="restartBtn">Volver a jugar</button></div>
     `;
 
