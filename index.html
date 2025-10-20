@@ -7,205 +7,181 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f3f6fb;
-      color: #333;
+      background: linear-gradient(135deg, #5b8dfd, #9e7bff);
+      color: #fff;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      overflow: hidden;
     }
     h1, h2 {
       text-align: center;
-      color: #1a237e;
+      margin-top: 20px;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      text-align: center;
+      transition: transform 0.6s ease, opacity 0.6s ease;
     }
     .question {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 15px 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .option {
+      display: block;
+      background: rgba(255,255,255,0.2);
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .option:hover {
+      background: rgba(255,255,255,0.4);
     }
     button {
-      display: block;
-      margin: 30px auto;
-      background-color: #1a73e8;
-      color: white;
+      background-color: #ffda79;
+      color: #333;
       border: none;
       padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
+      margin-top: 15px;
+      transition: background 0.3s, transform 0.2s;
     }
     button:hover {
-      background-color: #155ab6;
+      background-color: #ffe28a;
+      transform: scale(1.05);
     }
     #result {
       text-align: center;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      margin-top: 20px;
+      font-size: 18px;
+      line-height: 1.6;
     }
-    .option {
-      margin: 5px 0;
-      display: block;
+    .slide-out {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    .slide-in {
+      transform: translateX(0);
+      opacity: 1;
     }
   </style>
 </head>
 <body>
   <h1>Tu Virtud Interior</h1>
-  <h2>Descubre tus virtudes cardinales e intelectuales</h2>
-
-  <form id="quizForm">
-    <div id="questions"></div>
-    <button type="button" onclick="calculateResult()">Ver mi resultado</button>
-  </form>
-
-  <div id="result"></div>
+  <div class="container" id="quiz">
+    <div id="question-container"></div>
+    <button id="nextBtn">Aceptar</button>
+  </div>
+  <div class="container" id="result-container" style="display:none;"></div>
 
   <script>
     const questions = [
-      {
-        q: 'Un compañero se equivoca y culpa a otro para no meterse en problemas. ¿Qué haces?',
-        options: [
-          { text: 'Lo encaro con respeto y le pido que diga la verdad.', virtue: 'Justicia' },
-          { text: 'Lo disculpo para no crear conflicto.', virtue: 'Templanza' },
-          { text: 'No me meto, no es mi problema.', virtue: 'Falta de Fortaleza' }
-        ]
-      },
-      {
-        q: 'Te das cuenta de un error grave en un informe ya entregado al cliente.',
-        options: [
-          { text: 'Aviso de inmediato y propongo soluciones.', virtue: 'Prudencia' },
-          { text: 'Espero a ver si alguien lo nota antes.', virtue: 'Falta de Prudencia' },
-          { text: 'Lo arreglo sin informar.', virtue: 'Sabiduría' }
-        ]
-      },
-      {
-        q: 'Un jefe te critica duramente frente a tus compañeros.',
-        options: [
-          { text: 'Respondo con calma y explico mi punto.', virtue: 'Templanza' },
-          { text: 'Le contesto impulsivamente.', virtue: 'Falta de Prudencia' },
-          { text: 'Escucho y luego pido hablar en privado.', virtue: 'Fortaleza' }
-        ]
-      },
-      {
-        q: 'Te ofrecen un “beneficio” extra por acelerar un trámite interno.',
-        options: [
-          { text: 'Lo rechazo y lo informo.', virtue: 'Justicia' },
-          { text: 'Lo acepto si nadie se entera.', virtue: 'Falta de Fortaleza' },
-          { text: 'Pido asesoría antes de decidir.', virtue: 'Prudencia' }
-        ]
-      },
-      {
-        q: 'Tienes que diseñar una solución para un problema complejo.',
-        options: [
-          { text: 'Analizo datos y busco la mejor evidencia.', virtue: 'Ciencia' },
-          { text: 'Creo una propuesta original y funcional.', virtue: 'Arte' },
-          { text: 'Pido ayuda a otro sin pensar demasiado.', virtue: 'Falta de Sabiduría' }
-        ]
-      },
-      {
-        q: 'Un compañero nuevo comete un error que retrasa todo.',
-        options: [
-          { text: 'Le explico con paciencia y lo ayudo.', virtue: 'Entendimiento' },
-          { text: 'Lo corrijo bruscamente.', virtue: 'Falta de Templanza' },
-          { text: 'Ignoro el error para no perder tiempo.', virtue: 'Falta de Justicia' }
-        ]
-      },
-      {
-        q: 'Estás liderando un equipo y dos personas discuten constantemente.',
-        options: [
-          { text: 'Escucho a ambos y propongo un acuerdo justo.', virtue: 'Justicia' },
-          { text: 'Les exijo silencio y sigo con el trabajo.', virtue: 'Falta de Entendimiento' },
-          { text: 'Analizo sus puntos y busco una solución creativa.', virtue: 'Sabiduría' }
-        ]
-      },
-      {
-        q: 'Te ofrecen ascender, pero el cargo implica más presión y menos tiempo libre.',
-        options: [
-          { text: 'Acepto el reto y me organizo bien.', virtue: 'Fortaleza' },
-          { text: 'Rechazo porque no quiero estrés.', virtue: 'Falta de Fortaleza' },
-          { text: 'Consulto con alguien de confianza antes de decidir.', virtue: 'Prudencia' }
-        ]
-      },
-      {
-        q: 'Un cliente elogia tu trabajo públicamente.',
-        options: [
-          { text: 'Agradezco y destaco el esfuerzo del equipo.', virtue: 'Templanza' },
-          { text: 'Me quedo con todo el mérito.', virtue: 'Falta de Justicia' },
-          { text: 'Digo que fue suerte.', virtue: 'Falta de Entendimiento' }
-        ]
-      },
-      {
-        q: 'En una reunión, alguien propone una idea riesgosa.',
-        options: [
-          { text: 'Analizo los pros y contras antes de decidir.', virtue: 'Sabiduría' },
-          { text: 'La apoyo sin pensar mucho.', virtue: 'Falta de Prudencia' },
-          { text: 'La rechazo sin analizarla.', virtue: 'Falta de Entendimiento' }
-        ]
-      }
+      {q:'Un compañero se equivoca y culpa a otro para no meterse en problemas. ¿Qué haces?', options:[
+        {text:'Lo encaro con respeto y le pido que diga la verdad.', virtue:'Justicia'},
+        {text:'Lo disculpo para no crear conflicto.', virtue:'Templanza'},
+        {text:'No me meto, no es mi problema.', virtue:'Falta de Fortaleza'}]},
+      {q:'Te das cuenta de un error grave en un informe ya entregado al cliente.', options:[
+        {text:'Aviso de inmediato y propongo soluciones.', virtue:'Prudencia'},
+        {text:'Espero a ver si alguien lo nota antes.', virtue:'Falta de Prudencia'},
+        {text:'Lo arreglo sin informar.', virtue:'Sabiduría'}]},
+      {q:'Un jefe te critica duramente frente a tus compañeros.', options:[
+        {text:'Respondo con calma y explico mi punto.', virtue:'Templanza'},
+        {text:'Le contesto impulsivamente.', virtue:'Falta de Prudencia'},
+        {text:'Escucho y luego pido hablar en privado.', virtue:'Fortaleza'}]},
+      {q:'Te ofrecen un “beneficio” extra por acelerar un trámite interno.', options:[
+        {text:'Lo rechazo y lo informo.', virtue:'Justicia'},
+        {text:'Lo acepto si nadie se entera.', virtue:'Falta de Fortaleza'},
+        {text:'Pido asesoría antes de decidir.', virtue:'Prudencia'}]},
+      {q:'Tienes que diseñar una solución para un problema complejo.', options:[
+        {text:'Analizo datos y busco la mejor evidencia.', virtue:'Ciencia'},
+        {text:'Creo una propuesta original y funcional.', virtue:'Arte'},
+        {text:'Pido ayuda a otro sin pensar demasiado.', virtue:'Falta de Sabiduría'}]},
+      {q:'Un compañero nuevo comete un error que retrasa todo.', options:[
+        {text:'Le explico con paciencia y lo ayudo.', virtue:'Entendimiento'},
+        {text:'Lo corrijo bruscamente.', virtue:'Falta de Templanza'},
+        {text:'Ignoro el error para no perder tiempo.', virtue:'Falta de Justicia'}]},
+      {q:'Estás liderando un equipo y dos personas discuten constantemente.', options:[
+        {text:'Escucho a ambos y propongo un acuerdo justo.', virtue:'Justicia'},
+        {text:'Les exijo silencio y sigo con el trabajo.', virtue:'Falta de Entendimiento'},
+        {text:'Analizo sus puntos y busco una solución creativa.', virtue:'Sabiduría'}]},
+      {q:'Te ofrecen ascender, pero el cargo implica más presión y menos tiempo libre.', options:[
+        {text:'Acepto el reto y me organizo bien.', virtue:'Fortaleza'},
+        {text:'Rechazo porque no quiero estrés.', virtue:'Falta de Fortaleza'},
+        {text:'Consulto con alguien de confianza antes de decidir.', virtue:'Prudencia'}]},
+      {q:'Un cliente elogia tu trabajo públicamente.', options:[
+        {text:'Agradezco y destaco el esfuerzo del equipo.', virtue:'Templanza'},
+        {text:'Me quedo con todo el mérito.', virtue:'Falta de Justicia'},
+        {text:'Digo que fue suerte.', virtue:'Falta de Entendimiento'}]},
+      {q:'En una reunión, alguien propone una idea riesgosa.', options:[
+        {text:'Analizo los pros y contras antes de decidir.', virtue:'Sabiduría'},
+        {text:'La apoyo sin pensar mucho.', virtue:'Falta de Prudencia'},
+        {text:'La rechazo sin analizarla.', virtue:'Falta de Entendimiento'}]}
     ];
 
-    const container = document.getElementById('questions');
+    let current = 0;
+    const scores = {};
+    const qContainer = document.getElementById('question-container');
+    const nextBtn = document.getElementById('nextBtn');
 
-    questions.forEach((q, i) => {
-      const div = document.createElement('div');
-      div.className = 'question';
-      div.innerHTML = `<h3>${i + 1}. ${q.q}</h3>`;
-
-      q.options.forEach((opt, j) => {
-        const id = `q${i}_opt${j}`;
-        div.innerHTML += `
-          <label class='option'>
-            <input type='radio' name='q${i}' value='${opt.virtue}' required> ${opt.text}
-          </label>`;
+    function showQuestion(index) {
+      const q = questions[index];
+      qContainer.innerHTML = `<div class='slide-in'><div class='question'>${q.q}</div>`;
+      q.options.forEach((opt, i) => {
+        qContainer.innerHTML += `<label class='option'><input type='radio' name='q${index}' value='${opt.virtue}' required> ${opt.text}</label>`;
       });
-      container.appendChild(div);
+      qContainer.innerHTML += '</div>';
+    }
+
+    nextBtn.addEventListener('click', () => {
+      const answer = document.querySelector(`input[name='q${current}']:checked`);
+      if (!answer) return alert('Por favor selecciona una opción.');
+      const virtue = answer.value;
+      scores[virtue] = (scores[virtue] || 0) + 1;
+      qContainer.classList.add('slide-out');
+      setTimeout(() => {
+        current++;
+        if (current < questions.length) {
+          qContainer.classList.remove('slide-out');
+          showQuestion(current);
+        } else {
+          showResult();
+        }
+      }, 600);
     });
 
-    function calculateResult() {
-      const formData = new FormData(document.getElementById('quizForm'));
-      const scores = {};
-
-      for (let [key, value] of formData.entries()) {
-        if (!scores[value]) scores[value] = 0;
-        scores[value]++;
-      }
-
-      let topVirtue = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
-
-      let resultText = '';
-      switch (topVirtue) {
-        case 'Prudencia':
-          resultText = 'Eres una persona prudente: reflexiva, equilibrada y responsable en tus decisiones.';
-          break;
-        case 'Justicia':
-          resultText = 'Eres justo: valoras la equidad, la honestidad y el respeto en tus acciones.';
-          break;
-        case 'Fortaleza':
-          resultText = 'Eres fuerte: enfrentas los retos con valentía y mantienes tu integridad.';
-          break;
-        case 'Templanza':
-          resultText = 'Eres sereno: controlas tus emociones y promueves la armonía en tu entorno.';
-          break;
-        case 'Sabiduría':
-          resultText = 'Eres sabio: analizas con calma, aprendes de la experiencia y guías con razón.';
-          break;
-        case 'Ciencia':
-          resultText = 'Tienes pensamiento científico: basas tus decisiones en la evidencia y la lógica.';
-          break;
-        case 'Arte':
-          resultText = 'Tienes alma creativa: buscas el equilibrio entre la belleza, la utilidad y la expresión.';
-          break;
-        case 'Entendimiento':
-          resultText = 'Eres comprensivo: ayudas a otros y fomentas la empatía en tus relaciones.';
-          break;
-        default:
-          resultText = 'Tienes un equilibrio de virtudes, sigue fortaleciendo tu crecimiento ético y profesional.';
-      }
-
-      document.getElementById('result').innerHTML = `<h2>Resultado:</h2><p><b>${topVirtue}</b></p><p>${resultText}</p>`;
+    function showResult() {
+      document.getElementById('quiz').style.display = 'none';
+      const resultDiv = document.getElementById('result-container');
+      resultDiv.style.display = 'block';
+      let topVirtue = Object.keys(scores).reduce((a,b)=>scores[a]>scores[b]?a:b);
+      const icons = {
+        'Prudencia':'💡','Justicia':'⚖️','Fortaleza':'🔥','Templanza':'💧','Sabiduría':'🧠','Ciencia':'🔬','Arte':'🎨','Entendimiento':'🧩'
+      };
+      const descriptions = {
+        'Prudencia':'💡 Eres una persona prudente: reflexiva, equilibrada y paciente. Tomas decisiones tras analizar consecuencias y prefieres actuar con serenidad antes que impulsividad. En el ámbito profesional, esta virtud te permite evitar errores y mantener relaciones laborales sanas y respetuosas.',
+        'Justicia':'⚖️ Eres una persona justa: valoras la equidad y tratas a todos con respeto. Defiendes lo correcto incluso cuando no es fácil y sabes reconocer el mérito ajeno. En tu trabajo, esta virtud te convierte en alguien confiable, ético y transparente.',
+        'Fortaleza':'🔥 Tienes fortaleza interior: enfrentas la adversidad con determinación y mantienes la calma en los momentos difíciles. No temes asumir retos ni defender tus principios, lo que te hace una figura estable y valiente ante la presión profesional.',
+        'Templanza':'💧 Eres templado: sabes equilibrar tus emociones y actuar con sensatez. En tu entorno laboral, promueves la armonía y evitas conflictos innecesarios. Controlas impulsos, practicas la empatía y logras transmitir serenidad a los demás.',
+        'Sabiduría':'🧠 Eres sabio: analizas las situaciones con profundidad y tomas decisiones basadas en conocimiento y experiencia. Buscas el bien común y aprendes de cada vivencia, convirtiéndote en una guía confiable dentro de tu equipo o profesión.',
+        'Ciencia':'🔬 Tienes pensamiento científico: observas, analizas y fundamentas tus decisiones con datos y evidencia. Tu manera estructurada de trabajar aporta precisión y rigor ético a todo lo que haces.',
+        'Arte':'🎨 Tienes espíritu creativo: ves soluciones donde otros ven problemas y buscas equilibrio entre funcionalidad y belleza. En tu profesión, aportas innovación y visión estética con sentido ético.',
+        'Entendimiento':'🧩 Eres comprensivo: entiendes las emociones y perspectivas de los demás. Escuchas, orientas y construyes relaciones humanas positivas que fortalecen cualquier ambiente laboral.'
+      };
+      const desc = descriptions[topVirtue] || 'Tu perfil combina varias virtudes. Demuestras equilibrio y crecimiento ético continuo.';
+      resultDiv.innerHTML = `<h2>Resultado Final</h2><p>${desc}</p>`;
     }
+
+    showQuestion(current);
   </script>
 </body>
 </html>
